@@ -11,6 +11,7 @@ import { cores } from '../theme';
 export default function ListaScreen({ navigation, route }) {
   const [publicacoes, setPublicacoes] = useState([]);
   const [carregando, setCarregando] = useState(false);
+  const [falhou, setFalhou] = useState(false);
   const [mensagem, setMensagem] = useState(null);
   const [busca, setBusca] = useState('');
   const [filtros, setFiltros] = useState({
@@ -22,6 +23,7 @@ export default function ListaScreen({ navigation, route }) {
 
   const carregar = useCallback(async () => {
     setCarregando(true);
+    setFalhou(false);
     try {
       const dados = await publicacoesApi.listar(filtros);
       setPublicacoes(dados);
@@ -191,8 +193,17 @@ export default function ListaScreen({ navigation, route }) {
         onRefresh={carregar}
         contentContainerStyle={estilos.lista}
         ListEmptyComponent={
-          carregando ? null : <Text style={estilos.vazio}>Nenhuma publicação encontrada.</Text>
-        }
+          carregando ? null : falhou ? (
+    <View style={estilos.falha}>
+      <Text style={estilos.vazio}>Não foi possível carregar as publicações.</Text>
+      <TouchableOpacity style={estilos.botaoTentar} onPress={carregar}>
+        <Text style={estilos.botaoTentarTexto}>Tentar novamente</Text>
+      </TouchableOpacity>
+    </View>
+  ) : (
+    <Text style={estilos.vazio}>Nenhuma publicação encontrada.</Text>
+  )
+}
       />
 
       <TouchableOpacity style={estilos.botaoNova} onPress={() => navigation.navigate('Formulario')}>
@@ -241,6 +252,15 @@ const estilos = StyleSheet.create({
   contador: { color: cores.textoSuave, fontSize: 12, marginBottom: 6 },
   lista: { paddingBottom: 90 },
   vazio: { textAlign: 'center', color: cores.textoSuave, marginTop: 30 },
+  falha: { alignItems: 'center' },
+  botaoTentar: {
+   marginTop: 12,
+   backgroundColor: cores.primaria,
+   borderRadius: 10,
+   paddingVertical: 10,
+   paddingHorizontal: 22,
+  },
+  botaoTentarTexto: { color: cores.branco, fontWeight: '600' },
   card: {
     backgroundColor: cores.branco,
     borderRadius: 12,
