@@ -130,6 +130,7 @@ export default function FormularioScreen({ navigation, route }) {
             style={[estilos.input, erros.titulo && estilos.inputErro]}
             value={titulo}
             onChangeText={setTitulo}
+	    maxLength={100}
             placeholder="Ex.: Como organizar meu autocuidado"
             placeholderTextColor={cores.textoSuave}
           />
@@ -150,6 +151,7 @@ export default function FormularioScreen({ navigation, route }) {
             style={[estilos.input, erros.autora && estilos.inputErro, anonima && estilos.inputDesabilitado]}
             value={autora}
             onChangeText={setAutora}
+	    maxLength={80}
             editable={!anonima}
             placeholder="Ex.: Ana"
             placeholderTextColor={cores.textoSuave}
@@ -169,6 +171,7 @@ export default function FormularioScreen({ navigation, route }) {
             style={[estilos.input, estilos.areaTexto, erros.conteudo && estilos.inputErro]}
             value={conteudo}
             onChangeText={setConteudo}
+	    maxLength={2000}
             multiline
             textAlignVertical="top"
             placeholder="Escreva o relato ou a informação da publicação"
@@ -181,6 +184,7 @@ export default function FormularioScreen({ navigation, route }) {
             style={[estilos.input, erros.tags && estilos.inputErro]}
             value={tags}
             onChangeText={setTags}
+	    maxLength={150}
             placeholder="Ex.: autocuidado, rotina"
             placeholderTextColor={cores.textoSuave}
           />
