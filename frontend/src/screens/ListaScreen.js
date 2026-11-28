@@ -3,6 +3,7 @@ import { Alert, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } 
 import { useFocusEffect } from '@react-navigation/native';
 import Banner from '../components/Banner';
 import Seletor from '../components/Seletor';
+import AvisoSaude from '../components/AvisoSaude';
 import { publicacoesApi } from '../api/publicacoesApi';
 import { CATEGORIAS, STATUS, rotuloDe } from '../constants/opcoes';
 import { formatarData } from '../utils/formatarData';
@@ -204,6 +205,7 @@ export default function ListaScreen({ navigation, route }) {
     <Text style={estilos.vazio}>Nenhuma publicação encontrada.</Text>
   )
 }
+        ListFooterComponent={<AvisoSaude compacto />}
       />
 
       <TouchableOpacity style={estilos.botaoNova} onPress={() => navigation.navigate('Formulario')}>
