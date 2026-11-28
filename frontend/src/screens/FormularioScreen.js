@@ -17,6 +17,16 @@ import { publicacoesApi } from '../api/publicacoesApi';
 import { CATEGORIAS, STATUS } from '../constants/opcoes';
 import { cores } from '../theme';
 
+function traduzirErro(texto) {
+  if (/must not be (blank|null|empty)/i.test(texto)) {
+    return 'Campo obrigatório.';
+  }
+  if (/size must be/i.test(texto)) {
+    return 'Tamanho inválido para este campo.';
+  }
+  return texto || 'Valor inválido.';
+  }
+
 export default function FormularioScreen({ navigation, route }) {
   const original = route.params?.publicacao;
   const editando = Boolean(original);
@@ -111,7 +121,16 @@ export default function FormularioScreen({ navigation, route }) {
         ts: Date.now(),
       });
     } catch (e) {
-      setMensagem({ tipo: 'erro', texto: e.message });
+      if (e.erros) {
+        const doServidor = {};
+        Object.entries(e.erros).forEach(([campo, texto]) => {
+          doServidor[campo] = traduzirErro(texto);
+        });
+        setErros(doServidor);
+        setMensagem({ tipo: 'erro', texto: 'Corrija os campos destacados.' });
+      } else {
+        setMensagem({ tipo: 'erro', texto: e.message });
+      }
     } finally {
       setSalvando(false);
     }
